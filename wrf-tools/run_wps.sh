@@ -49,9 +49,10 @@ for FILE in "${EXECUTABLES[@]}"; do
 done
 
 # ========================== Real-time Data ==========================
-#echo "Downloading Real-time Data"
-#python $ROOT_DIR/wrf-tools/download_ds084.1.py $RDAEMAIL $RDAPWD $DATA_DIR/GFS
-#echo "--- Completed"
+echo "Downloading Real-time Data"
+python $ROOT_DIR/wrf-tools/download_ds084.1.py $RDAEMAIL $RDAPWD $DATA_DIR/GFS
+echo "--- Completed"
+
 # ========================== Run WPS ==========================
 python $ROOT_DIR/wrf-tools/templates/render_templates.py --wrf_root $ROOT_DIR
 

@@ -111,27 +111,27 @@ echo "--- Extraction complete"
 
 source ${ROOT_DIR}/wrf-tools/env.sh ${ROOT_DIR}
 
-#cd $LIB_DIR/$NETCDF_NAME
-#rm -rf $LIB_DIR/netcdf
-#make clean &> $LIB_DIR/log.compile
-#./configure --prefix=$DIR/netcdf --disable-dap --disable-netcdf-4 --disable-shared >> $LIB_DIR/log.compile 2>&1
-#make >> $LIB_DIR/log.compile 2>&1
-#make install >> $LIB_DIR/log.compile 2>&1
-#
-#cd $LIB_DIR/$MPICH_NAME
-#rm -rf $LIB_DIR/mpich
-#make clean >> $LIB_DIR/log.compile 2>&1
-#./configure --prefix=$DIR/mpich >> $LIB_DIR/log.compile 2>&1
-#make >> $LIB_DIR/log.compile 2>&1
-#make install >> $LIB_DIR/log.compile 2>&1
-#
-#for LIB_NAME in $ZLIB_NAME $LIBPNG_NAME $JASPER_NAME; do
-#    cd $LIB_DIR/$LIB_NAME
-#    make clean >> $LIB_DIR/log.compile 2>&1
-#    ./configure --prefix=$DIR/grib2 >> $LIB_DIR/log.compile 2>&1
-#    make >> $LIB_DIR/log.compile 2>&1
-#    make install >> $LIB_DIR/log.compile 2>&1
-#done
+cd $LIB_DIR/$NETCDF_NAME
+rm -rf $LIB_DIR/netcdf
+make clean &> $LIB_DIR/log.compile
+./configure --prefix=$DIR/netcdf --disable-dap --disable-netcdf-4 --disable-shared >> $LIB_DIR/log.compile 2>&1
+make >> $LIB_DIR/log.compile 2>&1
+make install >> $LIB_DIR/log.compile 2>&1
+
+cd $LIB_DIR/$MPICH_NAME
+rm -rf $LIB_DIR/mpich
+make clean >> $LIB_DIR/log.compile 2>&1
+./configure --prefix=$DIR/mpich >> $LIB_DIR/log.compile 2>&1
+make >> $LIB_DIR/log.compile 2>&1
+make install >> $LIB_DIR/log.compile 2>&1
+
+for LIB_NAME in $ZLIB_NAME $LIBPNG_NAME $JASPER_NAME; do
+    cd $LIB_DIR/$LIB_NAME
+    make clean >> $LIB_DIR/log.compile 2>&1
+    ./configure --prefix=$DIR/grib2 >> $LIB_DIR/log.compile 2>&1
+    make >> $LIB_DIR/log.compile 2>&1
+    make install >> $LIB_DIR/log.compile 2>&1
+done
 echo "--- Building complete. Logs are available at $LIB_DIR/log.compile"
 
 # ========================== Library Compatibility Tests ==========================
@@ -190,18 +190,18 @@ else
     git clone https://github.com/wrf-model/WPS.git $WPS_DIR --quiet
 fi
 
-#cd $WRF_DIR
-## option 34: GNU compiler + dmpar
-#./configure <<< 34 &> /dev/null
-#./compile em_real &> log.compile
-#echo "--- WRF compilation complete"
+cd $WRF_DIR
+# option 34: GNU compiler + dmpar
+./configure <<< 34 &> /dev/null
+./compile em_real &> log.compile
+echo "--- WRF compilation complete"
 
-#cd $WPS_DIR
-#./clean &> /dev/null
-### option 3: GNU compiler + dmpar
-#./configure <<< 3 &> /dev/null
-#./compile &> log.compile
-#echo "--- WPS compilation complete"
+cd $WPS_DIR
+./clean &> /dev/null
+## option 3: GNU compiler + dmpar
+./configure <<< 3 &> /dev/null
+./compile &> log.compile
+echo "--- WPS compilation complete"
 
 # ========================== Static Geography Data ==========================
 echo "Static Geography Data"
