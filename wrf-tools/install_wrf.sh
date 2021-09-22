@@ -73,9 +73,20 @@ elif ! $TEST_DIR/a.out | grep -q 'SUCCESS'; then
 fi
 rm $TEST_DIR/a.out
 
-if !$TEST_DIR/TEST_sh.sh &> /dev/null && !$TEST_DIR/TEST_csh.csh &> /dev/null && !$TEST_DIR/TEST_perl.pl &> /dev/null;
+if ! $TEST_DIR/TEST_sh.sh &> /dev/null;
 then
-    echo "ERROR: please check sh, csh and perl installation"
+    echo "ERROR: please check sh installation"
+    exit
+fi
+if ! $TEST_DIR/TEST_csh.csh &> /dev/null;
+then
+    echo "ERROR: please check csh installation"
+    exit
+fi
+if ! $TEST_DIR/TEST_perl.pl &> /dev/null;
+then
+    echo "ERROR: please perl installation"
+    exit
 fi
 echo "--- System Environment Tests successfully passed"
 
