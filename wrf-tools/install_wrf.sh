@@ -1,11 +1,26 @@
 #!/bin/bash
 
+while [ $# -gt 0 ]; do
+  case "$1" in
+    --clean-src)
+      CLEAN=1
+      ;;
+    *)
+      printf "***************************\n"
+      printf "* Error: Invalid argument.*\n"
+      printf "***************************\n"
+      exit 1
+  esac
+  shift
+done
+
 SCRIPT_PATH=$(dirname $(readlink -f $0))
 ROOT_DIR=${SCRIPT_PATH%/*}
 
 mkdir $ROOT_DIR/build -p
 mkdir $ROOT_DIR/build/tests -p
 mkdir $ROOT_DIR/build/lib -p
+mkdir $ROOT_DIR/build/lib/src -p
 mkdir $ROOT_DIR/data -p
 
 WRF_DIR=$ROOT_DIR/build/WRF
@@ -107,8 +122,8 @@ LIB_URLS=(
     "https://download.sourceforge.net/libpng/${LIBPNG_NAME}.tar.gz"
 )
 for URL in "${LIB_URLS[@]}"; do
-    if [[ ! -f "$LIB_DIR/${URL##*/}" ]]; then
-        wget $URL -O $LIB_DIR/${URL##*/} -q
+    if [[ ! -f "$LIB_DIR/src/${URL##*/}" ]]; then
+        wget $URL -O $LIB_DIR/src/${URL##*/} -q --show-progress
     else
         echo "OK: $URL already exists."
     fi
@@ -116,20 +131,20 @@ done
 echo "--- Download complete"
 
 for URL in "${LIB_URLS[@]}"; do
-    tar xzf $LIB_DIR/${URL##*/} --directory $LIB_DIR
+    tar xzf $LIB_DIR/src/${URL##*/} --directory $LIB_DIR/src
 done
 echo "--- Extraction complete"
 
 source ${ROOT_DIR}/wrf-tools/env.sh ${ROOT_DIR}
 
-cd $LIB_DIR/$NETCDF_NAME
+cd $LIB_DIR/src/$NETCDF_NAME
 rm -rf $LIB_DIR/netcdf
 make clean &> $LIB_DIR/log.compile
 ./configure --prefix=$DIR/netcdf --disable-dap --disable-netcdf-4 --disable-shared >> $LIB_DIR/log.compile 2>&1
 make >> $LIB_DIR/log.compile 2>&1
 make install >> $LIB_DIR/log.compile 2>&1
 
-cd $LIB_DIR/$MPICH_NAME
+cd $LIB_DIR/src/$MPICH_NAME
 rm -rf $LIB_DIR/mpich
 make clean >> $LIB_DIR/log.compile 2>&1
 ./configure --prefix=$DIR/mpich >> $LIB_DIR/log.compile 2>&1
@@ -137,12 +152,16 @@ make >> $LIB_DIR/log.compile 2>&1
 make install >> $LIB_DIR/log.compile 2>&1
 
 for LIB_NAME in $ZLIB_NAME $LIBPNG_NAME $JASPER_NAME; do
-    cd $LIB_DIR/$LIB_NAME
+    cd $LIB_DIR/src/$LIB_NAME
     make clean >> $LIB_DIR/log.compile 2>&1
     ./configure --prefix=$DIR/grib2 >> $LIB_DIR/log.compile 2>&1
     make >> $LIB_DIR/log.compile 2>&1
     make install >> $LIB_DIR/log.compile 2>&1
 done
+
+if [[ -n $CLEAN ]]; then
+  rm -rf $LIB_DIR/src/*
+fi
 echo "--- Building complete. Logs are available at $LIB_DIR/log.compile"
 
 # ========================== Library Compatibility Tests ==========================
