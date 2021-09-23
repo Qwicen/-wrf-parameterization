@@ -3,6 +3,7 @@ import os
 import sys
 import yaml
 import requests
+import argparse
 from datetime import datetime, timedelta
 
 
@@ -32,16 +33,15 @@ def get_file_list_from_config(cfg):
 
 
 if __name__ == '__main__':
-    if len(sys.argv) == 4:
-        email = sys.argv[1]
-        password = sys.argv[2]
-        data_path = sys.argv[3]
-    else:
-        print('Please provide EMAIL, PWD and PATH arguments in order to download real-time data.')
-        exit(1)
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--wrf_root', type=str, required=True)
+    parser.add_argument('--email', type=str, required=True)
+    parser.add_argument('--pwd', type=str, required=True)
+    parser.add_argument('--data_path', type=str, required=True)
+    args = parser.parse_args()
 
     url = 'https://rda.ucar.edu/cgi-bin/login'
-    ret = requests.post(url, data={'email': email, 'passwd': password, 'action': 'login'})
+    ret = requests.post(url, data={'email': args.email, 'passwd': args.pwd, 'action': 'login'})
     if ret.status_code != 200:
         print('Bad Authentication')
         print(ret.text)
@@ -51,13 +51,13 @@ if __name__ == '__main__':
 
     dspath = 'https://rda.ucar.edu/data/ds084.1/'
 
-    with open("./config.yml", "r") as file:
+    with open(os.path.join(args.wrf_root, "config.yml"), "r") as file:
         config = yaml.load(file, Loader=yaml.CLoader)
 
     file_list = get_file_list_from_config(config)
     for file in file_list:
         filename = dspath+file
-        file_base = os.path.join(data_path, os.path.basename(file))
+        file_base = os.path.join(args.data_path, os.path.basename(file))
         print('Downloading', file_base)
         req = requests.get(filename, cookies=ret.cookies, allow_redirects=True, stream=True)
         filesize = int(req.headers['Content-length'])

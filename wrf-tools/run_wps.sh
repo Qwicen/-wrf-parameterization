@@ -50,7 +50,7 @@ done
 
 # ========================== Real-time Data ==========================
 echo "Downloading Real-time Data"
-python $ROOT_DIR/wrf-tools/download_ds084.1.py $RDAEMAIL $RDAPWD $DATA_DIR/GFS
+python $ROOT_DIR/wrf-tools/download_ds084.1.py --wrf_root $ROOT_DIR --email $RDAEMAIL --pwd $RDAPWD --data_path $DATA_DIR/GFS
 echo "--- Completed"
 
 # ========================== Run WPS ==========================
