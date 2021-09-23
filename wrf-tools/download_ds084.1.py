@@ -51,7 +51,7 @@ if __name__ == '__main__':
 
     dspath = 'https://rda.ucar.edu/data/ds084.1/'
 
-    with open(os.path.join(args.wrf_root, "config.yml"), "r") as file:
+    with open(os.path.join(args.wrf_root, "wrf-tools/config.yml"), "r") as file:
         config = yaml.load(file, Loader=yaml.CLoader)
 
     file_list = get_file_list_from_config(config)
