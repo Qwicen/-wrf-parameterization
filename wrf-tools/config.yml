@@ -20,3 +20,18 @@ domains:
         E_SN: 120
         GEOG_DATA_RES: '"default"'
 
+physics:
+    MP_PHYSICS: 8
+    RA_LW_PHYSICS: 4
+    RA_SW_PHYSICS: 4
+    RADT: 6
+    SF_SFCLAY_PHYSICS: 1
+    SF_SURFACE_PHYSICS: 2
+    SF_URBAN_PHYSICS: 1
+    BL_PBL_PHYSICS: 1
+    CU_PHYSICS: 3
+
+dynamics:
+    DIFF_6TH_OPT: 0
+    DIFF_OPT: 1
+    KM_OPT: 4

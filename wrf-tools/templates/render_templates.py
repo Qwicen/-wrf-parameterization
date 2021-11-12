@@ -19,6 +19,8 @@ if __name__ == "__main__":
     time = {key: config['time'][key] for key in config['time']}
     geogrid = {key: config['geogrid'][key] for key in config['geogrid']}
     domains = {key: ",".join([str(dom[key]) for dom in config['domains']]) for key in config['domains'][0].keys()}
+    physics = {key: config["physics"][key] for key in config["physics"]}
+    dynamics = {key: config["dynamics"][key] for key in config["dynamics"]}
 
     config_wps = template_wps.render({**time, **geogrid, **domains})
     with open(os.path.join(parsed_args.wrf_root, 'build/WPS', 'namelist.wps'), "w") as file:
@@ -37,6 +39,6 @@ if __name__ == "__main__":
     time["END_MONTH"] = end_date.month
     time["END_DAY"] = end_date.day
     time["END_HOUR"] = end_date.hour
-    config_wrf = template_wrf.render({**time, **geogrid, **domains})
+    config_wrf = template_wrf.render({**time, **geogrid, **domains, **physics, **dynamics})
     with open(os.path.join(parsed_args.wrf_root, 'build/WRF/run', 'namelist.input'), "w") as file:
         file.write(config_wrf)
