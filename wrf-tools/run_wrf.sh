@@ -1,5 +1,19 @@
 #!/bin/bash
 
+while [ $# -gt 0 ]; do
+  case "$1" in
+    --n_jobs=*)
+      N_JOBS="${1#*=}"
+      ;;
+    *)
+      printf "***************************\n"
+      printf "* Error: Invalid argument.*\n"
+      printf "***************************\n"
+      exit 1
+  esac
+  shift
+done
+
 SCRIPT_PATH=$(dirname $(readlink -f $0))
 ROOT_DIR=${SCRIPT_PATH%/*}
 
@@ -42,9 +56,9 @@ ln -s $WPS_DIR/met_em* .
 python $ROOT_DIR/wrf-tools/templates/render_templates.py --wrf_root $ROOT_DIR
 
 echo "Running real.exe"
-mpirun -np 4 ./real.exe
+mpirun -np $N_JOBS ./real.exe
 echo "--- Completed"
 
 echo "Running wrf.exe"
-mpirun -np 4 ./wrf.exe
+mpirun -np $N_JOBS ./wrf.exe
 echo "--- Completed"
