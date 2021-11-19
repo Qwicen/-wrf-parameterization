@@ -24,8 +24,9 @@ def get_file_list_from_config(cfg):
     file_list = []
     cur_date = start_date
     while cur_date <= end_date:
-        ymd_substr = f"{start_date.year}{start_date.month:0>2}{start_date.day:0>2}"
-        name = f"{start_date.year}/{ymd_substr}/gfs.0p25.{ymd_substr}{start_date.hour:0>2}.f{cur_date.hour:0>3}.grib2"
+        ymd_str = f"{start_date.year}{start_date.month:0>2}{start_date.day:0>2}"
+        hours_from_start = (cur_date - start_date).days * 24 + cur_date.hour
+        name = f"{start_date.year}/{ymd_str}/gfs.0p25.{ymd_str}{start_date.hour:0>2}.f{hours_from_start:0>3}.grib2"
         file_list.append(name)
         cur_date += delta
 
