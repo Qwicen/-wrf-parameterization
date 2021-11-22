@@ -231,7 +231,7 @@ cd $WPS_DIR
 ./clean &> /dev/null
 ## option 3: GNU compiler + dmpar
 ./configure <<< 3 &> /dev/null
-sed --in-place 's/^FCCOMPAT/d' ./configure.wps
+sed --in-place '/^FCCOMPAT/d' ./configure.wps
 ./compile &> log.compile
 echo "--- WPS compilation complete"
 
