@@ -159,6 +159,7 @@ for LIB_NAME in $ZLIB_NAME $LIBPNG_NAME $JASPER_NAME; do
     make install >> $LIB_DIR/log.compile 2>&1
 done
 
+cd $ROOT_DIR
 if [[ -n $CLEAN ]]; then
   rm -rf $LIB_DIR/src/*
 fi
@@ -230,7 +231,7 @@ cd $WPS_DIR
 ./clean &> /dev/null
 ## option 3: GNU compiler + dmpar
 ./configure <<< 3 &> /dev/null
-sed --in-place '/FCCOMPAT/d' ./configure.wps
+sed --in-place 's/^FCCOMPAT/d' ./configure.wps
 ./compile &> log.compile
 echo "--- WPS compilation complete"
 
