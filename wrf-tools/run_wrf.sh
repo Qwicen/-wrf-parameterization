@@ -47,11 +47,13 @@ python $ROOT_DIR/wrf-tools/templates/render_templates.py --wrf_root $ROOT_DIR
 
 cd $WRF_DIR/run
 rm -f wrfout*
+rm -f auxhist7*
 rm -f wrfbdy*
 rm -f wrfinput*
 rm -f rsl.*
 rm -f met_em*
 
+ln -s $ROOT_DIR/wrf-tools/config/my_output_fields_d01.txt .
 ln -s $WPS_DIR/met_em* .
 python $ROOT_DIR/wrf-tools/templates/render_templates.py --wrf_root $ROOT_DIR
 

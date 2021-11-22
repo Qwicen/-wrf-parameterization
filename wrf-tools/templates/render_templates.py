@@ -13,7 +13,7 @@ if __name__ == "__main__":
     template_wps = env.get_template('template_namelist.wps')
     template_wrf = env.get_template('template_namelist.input')
 
-    with open(os.path.join(parsed_args.wrf_root, 'wrf-tools/config.yml'), "r") as file:
+    with open(os.path.join(parsed_args.wrf_root, 'wrf-tools/config/config.yml'), "r") as file:
         config = yaml.load(file, Loader=yaml.CLoader)
 
     time = {key: config['time'][key] for key in config['time']}

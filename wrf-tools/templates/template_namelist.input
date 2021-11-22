@@ -21,6 +21,12 @@
  io_form_restart                     = 2
  io_form_input                       = 2
  io_form_boundary                    = 2
+ iofields_filename = "my_output_fields_d01.txt",
+ ignore_iofields_warning = .true.,
+ auxhist7_interval = 60,
+ frames_per_auxhist7 = 1,
+ io_form_auxhist7 = 2
+
  /
 
  &domains
