@@ -1,0 +1,50 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{JOB_ID}}
+spec:
+  template:
+    spec:
+      containers:
+      - name: {{JOB_ID}}
+        image: qwicen/wrf-ubuntu
+        command: ["/bin/bash", "-c"]
+        args:
+          - OUTPATH={{RESULTS_PATH}};
+            mkdir $OUTPATH/logs;
+            
+            exec &> $OUTPATH/logs/output.txt;
+            
+            cp $OUTPATH/config.yml /wrf/wrf-tools/config/config.yml;
+            mkdir /wrf/data -p;
+            ln -s {{DATA_DIR}}/GFS /wrf/data/GFS;
+            cp {{SCRIPTS_DIR}}/my_output_fields_d01.txt /wrf/wrf-tools/config/my_output_fields_d01.txt;
+            cp {{SCRIPTS_DIR}}/run_wps.sh /wrf/wrf-tools/run_wps.sh;
+            cp {{SCRIPTS_DIR}}/run_wrf.sh /wrf/wrf-tools/run_wrf.sh;
+            cp {{SCRIPTS_DIR}}/download_ds084.1.py /wrf/wrf-tools/download_ds084.1.py;
+            cp {{SCRIPTS_DIR}}/render_templates.py /wrf/wrf-tools/templates/render_templates.py;
+            cp {{SCRIPTS_DIR}}/template_namelist.input /wrf/wrf-tools/templates/template_namelist.input;
+            cp {{SCRIPTS_DIR}}/template_namelist.wps /wrf/wrf-tools/templates/template_namelist.wps;
+            
+            python {{SCRIPTS_DIR}}/link_ungrib_data.py --data_wps_dir {{DATA_DIR}}/dump_ungrib_data/WPS --wps_dir /wrf/build/WPS;
+            
+            /wrf/wrf-tools/run_wps.sh --email=popovsergey95@gmail.com --pass=ncardatapwd;
+            ls -la /wrf/build/WPS;
+            cp /wrf/build/WPS/log.* $OUTPATH/logs;
+            cp /wrf/build/WPS/geo_em.d01.nc $OUTPATH;
+
+        volumeMounts:
+          - name: azure
+            mountPath: /share
+          - name: local-volume
+            mountPath: /localvol
+        resources:
+      restartPolicy: Never
+      volumes:
+      - name: azure
+        persistentVolumeClaim:
+          claimName: amorozov-s3
+      - name: local-volume
+        hostPath:
+          path: /local
+  backoffLimit: 1
