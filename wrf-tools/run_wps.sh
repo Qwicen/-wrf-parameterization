@@ -24,9 +24,6 @@ WRF_DIR=$ROOT_DIR/build/WRF
 WPS_DIR=$ROOT_DIR/build/WPS
 DATA_DIR=$ROOT_DIR/data
 
-mkdir $ROOT_DIR/data -p
-mkdir $ROOT_DIR/data/GFS -p
-
 source ${ROOT_DIR}/wrf-tools/env.sh ${ROOT_DIR}
 
 # ========================== Check WRF installation ==========================
@@ -48,11 +45,6 @@ for FILE in "${EXECUTABLES[@]}"; do
     fi
 done
 
-# ========================== Real-time Data ==========================
-echo "Downloading Real-time Data"
-python $ROOT_DIR/wrf-tools/download_ds084.1.py --wrf_root $ROOT_DIR --email $RDAEMAIL --pwd $RDAPWD --data_path $DATA_DIR/GFS
-echo "--- Completed"
-
 # ========================== Run WPS ==========================
 python $ROOT_DIR/wrf-tools/templates/render_templates.py --wrf_root $ROOT_DIR
 
@@ -67,12 +59,6 @@ echo "--- Completed"
 rm -f GRIBFILE.*
 ./link_grib.csh $DATA_DIR/GFS/*
 ln -sf ungrib/Variable_Tables/Vtable.GFS Vtable
-
-echo "Running ungrib"
-rm -f log.ungrib
-rm -f FILE:*
-./ungrib.exe &> log.ungrib
-echo "--- Completed"
 
 echo "Running metgrid"
 rm -f met_em.d*.nc

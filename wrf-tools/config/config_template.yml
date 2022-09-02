@@ -1,0 +1,38 @@
+time:
+    START_DATE: {{START_DATE}}
+    END_DATE:   {{END_DATE}}
+    INTERVAL_SECONDS: {{INTERVAL_SECONDS}}
+
+geogrid:
+    N_DOMAINS: 1
+    DX: {{DX}}
+    DY: {{DX}}
+    LAT: {{LAT}}
+    LON: {{LON}}
+    DATA_PATH: '"/share/wrf/data/WPS_GEOG"'
+
+domains:
+    -   PARENT_ID: 1
+        PARENT_GRID_RATIO: 1
+        I_PARENT_START: 1
+        J_PARENT_START: 1
+        TIME_STEP: {{TIME_STEP}}
+        E_WE: {{E_WE}}
+        E_SN: {{E_SN}}
+        GEOG_DATA_RES: '"default"'
+
+physics:
+    MP_PHYSICS: {{MP_PHYSICS}}
+    RA_LW_PHYSICS: {{RA_LW_PHYSICS}}
+    RA_SW_PHYSICS: {{RA_SW_PHYSICS}}
+    RADT: {{RADT}}
+    SF_SFCLAY_PHYSICS: {{SF_SFCLAY_PHYSICS}}
+    SF_SURFACE_PHYSICS: {{SF_SURFACE_PHYSICS}}
+    SF_URBAN_PHYSICS: {{SF_URBAN_PHYSICS}}
+    BL_PBL_PHYSICS: {{BL_PBL_PHYSICS}}
+    CU_PHYSICS: {{CU_PHYSICS}}
+
+dynamics:
+    DIFF_6TH_OPT: {{DIFF_6TH_OPT}}
+    DIFF_OPT: {{DIFF_OPT}}
+    KM_OPT: {{KM_OPT}}
